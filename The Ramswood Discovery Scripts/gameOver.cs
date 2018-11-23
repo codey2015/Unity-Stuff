@@ -4,16 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class gameOver : MonoBehaviour {
-
-
     public int CaughtCounter = 0; //used for game over
     bool doOnce = false;
     public int timesCaught = 3;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -23,8 +16,6 @@ public class gameOver : MonoBehaviour {
             Cursor.visible = true;
         }
     }
-
-
 
     void OnTriggerEnter(Collider other)
     {
@@ -44,14 +35,5 @@ public class gameOver : MonoBehaviour {
         {
             doOnce = false;
         }
-
     }
-
-
-
-
 }
-
-
-
-
