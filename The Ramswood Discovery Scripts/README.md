@@ -1,1 +1,1 @@
-#Scripts used in this game.
+# Scripts used in this game.
