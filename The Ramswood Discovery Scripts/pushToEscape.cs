@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class pushToEscape : MonoBehaviour {
 
-
     public Transform ob;
     public float moveUp = .5f;
     public float moveDownX = 0f;
@@ -21,26 +20,21 @@ public class pushToEscape : MonoBehaviour {
         originalY = ob.transform.position.y;
         vecCopy = ob.transform.position;
         press.enabled = false;
-
-
     }
 
     // Update is called once per frame
     void Update () {
-		if(ob.transform.position.y <= originalY)
+	if(ob.transform.position.y <= originalY)
         {
             ob.transform.position = vecCopy;
-            //ob.Translate(Vector3.up * originalY);
         }
         ob.transform.Translate(moveDownX, moveDownY, moveDownZ);
-
     }
 
     void OnTriggerStay(Collider col)
     {
         if (col.gameObject.tag == "Player")
         {
-            Debug.Log("D");
             if (Input.GetKeyDown(KeyCode.E))
             {
                 ob.transform.Translate(Vector3.up * moveUp);
@@ -54,11 +48,7 @@ public class pushToEscape : MonoBehaviour {
         if (col.gameObject.tag == "Player")
         {
             press.enabled = false;
-
         }
-
-        }
-
-
 
     }
+}
