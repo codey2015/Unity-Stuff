@@ -90,7 +90,6 @@ public class improvedPatrol : MonoBehaviour
         // Set the agent to go to the currently selected destination.
         agent.destination = points[destPoint].position;
 
-
         // Choose the next point in the array as the destination,
         // cycling to the start if necessary.
         destPoint = (destPoint + 1) % points.Length;
@@ -124,21 +123,14 @@ public class improvedPatrol : MonoBehaviour
                 //Debug.Log("DESTPOINT2:" + destPoint2 + Vector3.Distance(toPlayersDeath2[destPoint2].position, agent.transform.position) + "is GREATER THAN I:" + i +(Vector3.Distance(toPlayersDeath2[i].position, agent.transform.position) ));
                 closestPoint = i;
             }
-
-
         }
         return closestPoint;
     }
     
-        
-    
-
     void Update()
     {
-
-
         RaycastHit hit;
-        
+       
         Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward) * sightDistance, Color.green);
         Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right * angle.z).normalized * sightDistance, Color.green);
         Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right * angle.z).normalized * sightDistance, Color.green);
@@ -150,9 +142,7 @@ public class improvedPatrol : MonoBehaviour
         Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right / 4 * angle.z).normalized * sightDistance, Color.grey);
         Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right / 6 * angle.z).normalized * sightDistance, Color.red);
         Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right / 6 * angle.z).normalized * sightDistance, Color.red);
-
-    
-
+   
         if (Physics.Raycast(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward), out hit, sightDistance))//forward
         {
             if (hit.collider.gameObject.tag == "Player")
@@ -160,7 +150,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward) * sightDistance, Color.green);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -170,8 +159,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -186,7 +173,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right * angle.z).normalized * sightDistance, Color.green);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -196,8 +182,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -212,7 +196,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right * angle.z).normalized * sightDistance, Color.green);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -222,8 +205,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -238,7 +219,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right / 2 * angle.z).normalized * sightDistance, Color.blue);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -248,8 +228,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -264,7 +242,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right / 2 * angle.z).normalized * sightDistance, Color.blue);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -274,8 +251,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -290,7 +265,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right / 1.25f * angle.z).normalized * sightDistance, Color.cyan);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -300,8 +274,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -316,7 +288,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right / 1.25f * angle.z).normalized * sightDistance, Color.cyan);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -326,8 +297,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -342,7 +311,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right / 4 * angle.z).normalized * sightDistance, Color.gray);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -352,8 +320,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -368,7 +334,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right / 4 * angle.z).normalized * sightDistance, Color.gray);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -378,8 +343,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -394,7 +357,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward + agent.transform.right / 6 * angle.z).normalized * sightDistance, Color.red);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -404,8 +366,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -420,7 +380,6 @@ public class improvedPatrol : MonoBehaviour
                 Debug.DrawRay(agent.transform.position + Vector3.up * heightMultiplier, (agent.transform.forward - agent.transform.right / 6 * angle.z).normalized * sightDistance, Color.red);
                 check = true;
                 agent.destination = playerPoint.transform.position;
-                Debug.Log("It works(drawRay)AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 if (doOnce == false)
                 {
                     agent.speed += AiAddSpeed;
@@ -430,8 +389,6 @@ public class improvedPatrol : MonoBehaviour
                 {
                     if (Vector3.Distance(me.transform.position, thisAgent.transform.position) > runAwayDistance)
                     {
-                        //Debug.Log(Vector3.Distance(me.transform.position, thisAgent.transform.position));
-                        //Debug.Log((me.transform.position).magnitude);
                         check = false;
                         GotoNextPoint();
                     }
@@ -439,12 +396,6 @@ public class improvedPatrol : MonoBehaviour
             }
         }
 
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        //Debug.Log(destPoint2);
         Debug.Log(ClosestPoint() + " is the closest point" );
         // Choose the next destination point when the agent gets
         // close to the current one.
@@ -456,7 +407,6 @@ public class improvedPatrol : MonoBehaviour
                 if (isCaught == false)
                 {
                     agent.destination = playerPoint.transform.position; //make the AI follow the player
-                    //Debug.Log("isCaught==false");
                 }
                 if (Vector3.Distance(playerPoint.transform.position, agent.transform.position) < distanceAICanAttack && agent.remainingDistance < 0.5f ) //check distance to activate attack, must use Distance method for approximation
                 {
@@ -467,9 +417,7 @@ public class improvedPatrol : MonoBehaviour
 
                         if (agent.destination != toPlayersDeath2[greatestNum].position)
                         {
-                            //agent.destination = toPlayersDeath2[ClosestPoint()].position; 
                             GotoNextPoint2();
-
                         }
 
                         if (Vector3.Distance(toPlayersDeath2[greatestNum].position, agent.transform.position) < 1.5f || agent.transform.position == lastPosition.transform.position)//reached death point
@@ -481,9 +429,7 @@ public class improvedPatrol : MonoBehaviour
 
                             isCaught = false;
                             check = false;
-                        //agent.transform.position = points[0].position;
                             agent.transform.position = firstPosition.transform.position;
-                            //agent.transform.position = firstPosition.transform.position;
                             scarySound.Stop();
                             Debug.Log("Player reached death point.");
                         }
@@ -501,18 +447,10 @@ public class improvedPatrol : MonoBehaviour
                         Debug.Log("isCaught==falseAGAIN");
 
                     }
-                    //Debug.Log("Should work");
-
                 }//main loop that says if the player is within a certain distance, they will be caught
-                //Debug.Log("check = false");
             }//loop checking if the player is in the sound/vision box
 
         }//main loop to move the ai from point to point
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
         if (isCaught == true)
@@ -531,7 +469,6 @@ public class improvedPatrol : MonoBehaviour
                timesPressed += 1;
             }
             randNum = (Random.Range(15, 35));
-            //Debug.Log(randNum + " randNum");
         }
 
         if (alph >= 1 )
@@ -544,8 +481,6 @@ public class improvedPatrol : MonoBehaviour
 
             isCaught = false;
             check = false;
-            //agent.transform.position = points[1].position;
-            //scarySound.Stop();
             me.transform.position = lastPosition.transform.position;
             agent.transform.position = firstPosition.transform.position;
 
@@ -588,39 +523,28 @@ public class improvedPatrol : MonoBehaviour
         {
             //Debug.Log("Path Pending");
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
     }
 
     void OnTriggerEnter(Collider other)
     {
-
             if (other.gameObject.tag == "Player" || check == true)
             {
                 check = true;//went into vision box
                 isInVisionBox = true;
-            if (doOnce == false)
-            {
-                agent.speed += .5f;
-                scarySound.Play();
-                doOnce = true;
+                if (doOnce == false)
+                {
+                    agent.speed += .5f;
+                    scarySound.Play();
+                    doOnce = true;
+                }
             }
-                Debug.Log("HitsTrue");
-            }
-        
     }
-
-
-    
+ 
     void OnTriggerExit(Collider other)
     {
 
         if (other.gameObject.tag == "Player" || check == false)
         {
-            //check = false;
-            //isInVisionBox = false;
             if (doOnce == true)
             {
                 agent.speed -= .5f;
@@ -628,11 +552,6 @@ public class improvedPatrol : MonoBehaviour
                 alph = 0;
             }
             scarySound.Stop();
-
-            //agent.destination = points[destPoint].position;
-            Debug.Log("HitsFalse");
         }
     }
-    
-
 }
