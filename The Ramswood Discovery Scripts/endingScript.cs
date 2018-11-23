@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class endingScript : MonoBehaviour
 {
-
-
     public Transform[] goTo;
     public FirstPersonController me; //player controller
     public Camera cam;
@@ -34,11 +32,8 @@ public class endingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         if (wentIn == true && playOnce == true)
         {
-
             Time.timeScale = 0;
             cam.transform.position = Vector3.MoveTowards(cam.transform.position, goTo[nextPoint].position, speed);
             rotToward();
@@ -56,8 +51,6 @@ public class endingScript : MonoBehaviour
                 }
             }
         }
-        
-
     }
 
     void rotToward()
@@ -65,18 +58,14 @@ public class endingScript : MonoBehaviour
         Vector3 targetDir = goTo[nextPoint].up - cam.transform.position;
         Vector3 newDir = Vector3.RotateTowards(cam.transform.forward, targetDir, speed / 75, 0.0f);
         cam.transform.rotation = Quaternion.LookRotation(newDir);
-
     }
     void GotoNextPoint()
     {
         // Returns if no points have been set up
         if (goTo.Length == 0)
             return;
-
         nextPoint = (nextPoint + 1) % goTo.Length;
-
     }
-
 
     IEnumerator TruckStarting()
     {
@@ -84,13 +73,10 @@ public class endingScript : MonoBehaviour
         truck.Play();
         yield return new WaitForSeconds(4);
         playOnce = true;
-        
     }
-
 
     void OnTriggerEnter(Collider other)
     {
-        
         if (other.gameObject.tag == "Player" && OF.getOut == true)
         {
             StartCoroutine(TruckStarting());
@@ -98,7 +84,5 @@ public class endingScript : MonoBehaviour
             me.enabled = false;
             PM.checkUI = true;
         }
-
     }
-
 }
