@@ -1,1 +1,1 @@
-Repository for Unity related things.
+Repository for Unity related things (Mostly scripts).
