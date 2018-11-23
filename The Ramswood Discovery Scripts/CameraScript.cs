@@ -16,7 +16,6 @@ public class CameraScript : MonoBehaviour {
     public Light myLight;
     public AudioSource laugh;
 
-    //public Transform objectiveItem;
     public int objectiveCount = 0;
     public bool checkUI = false;
     public bool checkUI2 = false;
@@ -24,14 +23,11 @@ public class CameraScript : MonoBehaviour {
     private Shader shade;
     private Renderer rend;
 
-    // Use this for initialization
     void Start () {
         image.enabled = false;
     }
 	
-	// Update is called once per frame
 	void Update () {
-
         if (Input.GetKeyDown(KeyCode.C) && Time.timeScale == 1 && checkUI2 == false)
         {
             image.enabled = true;
@@ -44,8 +40,6 @@ public class CameraScript : MonoBehaviour {
             checkUI = false;
             count = 0;
         }
-
-
 
         if (Input.GetButtonDown("Fire1") && checkUI == true && Time.timeScale == 1)
         {
@@ -61,23 +55,14 @@ public class CameraScript : MonoBehaviour {
         }
         else
         {
-            //myLight.enabled = false;
             StartCoroutine(Flash());
         }
 
-
-
         if(objectiveCount == 10)
         {
-            //Cursor.visible = true;
             checkUI = false;
             checkUI2 = true;
-           // SceneManager.LoadScene("mainMenu");
-
         }
-
-
-
     }
 
     IEnumerator Flash()
@@ -85,8 +70,8 @@ public class CameraScript : MonoBehaviour {
 
         yield return new WaitForEndOfFrame();
         myLight.enabled = false;
-
     }
+	
     void checkCam()
     {
         RaycastHit hit;
@@ -106,14 +91,11 @@ public class CameraScript : MonoBehaviour {
 
                         if (child.GetComponent<Renderer>() != null)
                         {
-                            //rend = hit.transform.parent.GetComponentInChildren<Renderer>();
                             rend = child.GetComponent<Renderer>();
                             rend.material.shader = shade;
-                            //Debug.Log(hit.transform.parent.GetComponentInChildren<Renderer>());
                         }
                     }
                 }
-                //Destroy(hit.transform.gameObject);
                 objectiveCount += 1;
                 hit.transform.tag = "obtained";
             }
@@ -132,8 +114,5 @@ public class CameraScript : MonoBehaviour {
             myStyle.normal.textColor = Color.white;
             GUI.Box(new Rect(Screen.width / 10.0f, Screen.height / 1.3f, Screen.width / 3.2f, Screen.height / 20), preface + " " + objectiveCount, myStyle); // Inventory
         }
-
     }
-
-
 }
