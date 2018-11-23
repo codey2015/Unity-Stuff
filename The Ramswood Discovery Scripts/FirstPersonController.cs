@@ -82,7 +82,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             stamina = MAXstamina;
             MAXstamina = m_Stamina;
             isWalking = m_IsWalking;
-            //speed = m_RunSpeed;
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -95,8 +94,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.Init(transform, m_Camera.transform);
 
             staminaBar = new Rect(Screen.width / 10, Screen.height * 9 / 10, Screen.width / 3, Screen.height / 50);
-            //staminaTexture = new Texture2D(1, 1);
-            //staminaTexture.SetPixel(0, 0, Color.red);
             if(staminaTexture!=null)
             staminaTexture.Apply();
             
@@ -184,7 +181,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         }
 
-        IEnumerator WaitAgain()//////////////////////////////////////////////////////////////////////////////////////////
+        IEnumerator WaitAgain()
         {
             inventory -= 1;
             timer = true;
@@ -193,7 +190,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_WalkSpeed += speedPowerUp;
             yield return new WaitForSeconds(powerUpTime);
             check = true;
-            Debug.Log("hmmmmmm");
         }
 
 
@@ -207,7 +203,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
-            //float speed;
             GetInput(out speed);
             // always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
@@ -252,11 +247,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
-            isGrounded = Vector3.Angle(Vector3.up, hitNormal) <= m_CharacterController.slopeLimit;/////////
-
+            isGrounded = Vector3.Angle(Vector3.up, hitNormal) <= m_CharacterController.slopeLimit;
             ProgressStepCycle(speed);
             UpdateCameraPosition(speed);
-
             m_MouseLook.UpdateCursorLock();
         }
 
@@ -334,33 +327,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // Read input
             float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
             float vertical = CrossPlatformInputManager.GetAxis("Vertical");
-
             bool waswalking = m_IsWalking;
-
-
-            // On standalone builds, walk/run speed is modified by a key press.
-            // keep track of whether or not the character is walking or running
-            // m_IsWalking = !Input.GetKey(KeyCode.LeftShift);//////////////////////////////////////////
-            /*
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                Debug.Log("Started Running");
-                m_IsWalking = false;
-                m_RunSpeed = originalSpeed;
-                count += 1;
-
-            }
-
-            if (count >= 2)
-            {
-                m_IsWalking = true; //Allows the player to press shift instead of hold
-                count = 0;
-            }
-            */
+           
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
             m_Input = new Vector2(horizontal, vertical);
-            //////////////////////////////////////////////////////////
             if (m_IsWalking != true)
             {
                 stamina -= 1;
@@ -377,12 +348,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 stamina = 0;
                 m_IsWalking = true;
-                speed = m_WalkSpeed;  //WORKS
+                speed = m_WalkSpeed; 
                 m_WalkSpeed = originalWalkSpeed;
                 m_RunSpeed = originalSpeed;
                 count = 0;//sets count to 0 once the player runs out of stamina
             }
-            ///////////////////////////////////////////////////////////
             // normalize input if it exceeds 1 in combined length:
             if (m_Input.sqrMagnitude > 1)
             {
@@ -440,6 +410,3 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
     }
  }
-
-
-
