@@ -14,25 +14,19 @@ public class Audio_Trigger : MonoBehaviour
     void Start()
     {
         textO.enabled = (false);
-        //Sound.enabled = (false);
         volume = Sound.volume;
     }
 
-
     void Update()
     {
-
         if (activateTrigger && Input.GetKeyDown(KeyCode.E))
         {
-
-            // textO.enabled = (false);
             if (playOnce == true)
             {
                 Sound.Play();
             }
             Sound.volume = volume;
             count += 1;
-            //Destroy(this.gameObject);
         }
         if (count >= 2)
         {
@@ -55,7 +49,6 @@ public class Audio_Trigger : MonoBehaviour
             textO.enabled = (true);
             activateTrigger = true;
         }
-
     }
 
 
@@ -66,6 +59,5 @@ public class Audio_Trigger : MonoBehaviour
             textO.enabled = (false);
             activateTrigger = false;
         }
-
     }
 }
