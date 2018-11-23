@@ -5,15 +5,12 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class Inventory : MonoBehaviour
 {
-
-
     public float speedPowerUp = 3;
     public int powerUpTime = 4;
     Renderer rend;
     Collider col;
     public FirstPersonController me;
 
-    //bool extraCheck = false;
     void Start()
     {
         rend = GetComponent<Renderer>();
@@ -21,11 +18,6 @@ public class Inventory : MonoBehaviour
         col = GetComponent<Collider>();
         col.enabled = true;
         me = GameObject.FindObjectOfType<FirstPersonController>();
-        
-    }
-
-    void Update()
-    {
     }
 
     void OnTriggerEnter(Collider other)
@@ -34,11 +26,8 @@ public class Inventory : MonoBehaviour
         {
             col.enabled = false;
             rend.enabled = false;
-            Debug.Log("WORKIddddddddddddddNG");
             me.inventory += 1;
-
         }
     }
-
 }
 
