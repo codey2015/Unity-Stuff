@@ -47,7 +47,6 @@ public class TimerSpeedRun : MonoBehaviour {
             string excellentTime = "This would be an excellent time! That is if you finish anytime soon.";
             string veryGoodTime = "If you're near the end, you're doing very well! If not...";
             string goodTime = "Hey... that's pretty good!";
-            string funnyfourtwenty = "Haha";
 
             string decentTime = "You're making half decent time if you're near the end.";
 
@@ -64,14 +63,6 @@ public class TimerSpeedRun : MonoBehaviour {
                 myStyle.normal.textColor = Color.yellow;
                 //GUI.Box(new Rect((Screen.width) / xPos, (Screen.height) / yPos + 50, allowableWidth, allowableHeight), excellentTime, myStyle);
             }
-
-            if (minutes == 4 && seconds == 20)
-            {
-                myStyle.fontSize = fontsizzze;
-                myStyle.normal.textColor = Color.yellow;
-                GUI.Box(new Rect((Screen.width) / xPos, (Screen.height) / yPos + 50, allowableWidth, allowableHeight), funnyfourtwenty, myStyle);
-            }
-
             if (minutes == 5 && seconds >= 0 && seconds <= 5)
             {
                 myStyle.fontSize = fontsizzze;
