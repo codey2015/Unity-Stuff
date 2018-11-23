@@ -11,13 +11,10 @@ public class MainMenu : MonoBehaviour {
     public Button play;
     public Text playTxt;
     public Image im;
-
     public bool GO;
 
     public void Start()
     {
-        //Cursor.visible = true;
-
         if (GO == false)
         {
             play.enabled = false;
@@ -25,7 +22,6 @@ public class MainMenu : MonoBehaviour {
             im.enabled = false;
         }
     }
-
 
     public void playGame()
     {
@@ -35,7 +31,6 @@ public class MainMenu : MonoBehaviour {
         play.enabled = true;
         playTxt.enabled = true;
         im.enabled = true;
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void startGame()
@@ -59,8 +54,6 @@ public class MainMenu : MonoBehaviour {
 	{
 		SceneManager.LoadScene(0);
 	}
-
-
 	public void SG()
 	{
 		SceneManager.LoadScene(1);
