@@ -12,17 +12,13 @@ public class SpeedPickUp : MonoBehaviour {
     Collider m_Collider;
     public FirstPersonController me;
 
-    void Start () {
+    void Start () 
+    {
         rend = GetComponent<Renderer>();
         rend.enabled = true;
         m_Collider = GetComponent<Collider>();
         me = GameObject.FindObjectOfType<FirstPersonController>();
-
     }
-
-    void Update () {
-		
-	}
  
     IEnumerator Wait()
     {
@@ -40,10 +36,7 @@ public class SpeedPickUp : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
-            //Debug.Log("WORKIddddddddddddddNG");
             StartCoroutine(Wait());
-            //StopCoroutine("Wait");
         }
     }
-
 }
