@@ -139,15 +139,15 @@ public class MyCharacterController : MonoBehaviour
             }
 
             //bob head when moving, unless isjumping or is disabled... Need to fix
-            if (isGrounded && allowHeadBob == true)
+            if (isGrounded && allowHeadBob == true && !getInput(dash, false))
             {
                 elapsed += Time.deltaTime;
-                print(elapsed);
-                if (elapsed < bobSpeed || Mathf.Abs(mycam.transform.localPosition.y - transform.localPosition.y) > .5f)
+                //maybe take away the or part.. not sure
+                if (elapsed < bobSpeed)
                 {
                     mycam.transform.localPosition += new Vector3(0, Time.deltaTime * headBobHeight, 0);
                 }
-                if (elapsed > bobSpeed || Mathf.Abs(mycam.transform.localPosition.y - transform.localPosition.y) < .5f)
+                if (elapsed > bobSpeed)
                 {
                     mycam.transform.localPosition -= new Vector3(0, Time.deltaTime * headBobHeight, 0);
 
