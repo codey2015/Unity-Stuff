@@ -13,7 +13,10 @@ public class MyCharacterController : MonoBehaviour
     public float jumpAllowance = 1f;
     public float dashSpeedMultiplier = 2.5f;
     public float dashTime = .25f;
-    public float headBobSpeed = .15f;
+    public float headBobHeight = 1f;
+    [Tooltip("The lower, the faster the bob")]
+    public float bobSpeed = .5f;
+
     [Header("Movement Setup")]
     public string[] moveLeft = { "a", "left" };
     public string[] moveRight = { "d", "right" };
@@ -28,8 +31,6 @@ public class MyCharacterController : MonoBehaviour
     public bool dashInAir = true;
     public bool breathingEffect = true;
     public int numberOfJumps = 1;
-    //public int headBobHeight = 10;
-    public Vector3 headBob = new Vector3(0, 0.1f, 0);
     [Header("Look Angles")]
     public float minimumYLook = -60F;
     public float maximumYLook = 60F;
@@ -46,13 +47,8 @@ public class MyCharacterController : MonoBehaviour
     private Collider myCol;
     private float distanceToGround;
     private float originalSpeed;
-    //[SerializeField]
-    private Vector3 originalCameraPos;
-    private bool goingUp = true;
-    [SerializeField]
     private int jumpsNum = 1;
-    private bool jumpOnce = true;
-
+    private float elapsed = 0;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -60,8 +56,6 @@ public class MyCharacterController : MonoBehaviour
         myCol = GetComponent<Collider>();
         dasher = transform.GetChild(1).GetComponent<Transform>();
         originalSpeed = moveSpeed;
-        originalCameraPos = mycam.transform.position;
-        headBob += originalCameraPos;
     }
 
     void Update()
@@ -147,24 +141,20 @@ public class MyCharacterController : MonoBehaviour
             //bob head when moving, unless isjumping or is disabled... Need to fix
             if (isGrounded && allowHeadBob == true)
             {
-                
-                if (goingUp == true)
+                elapsed += Time.deltaTime;
+                print(elapsed);
+                if (elapsed < bobSpeed || Mathf.Abs(mycam.transform.localPosition.y - transform.localPosition.y) > .5f)
                 {
-                    mycam.transform.position += headBob * Time.deltaTime * headBobSpeed;
+                    mycam.transform.localPosition += new Vector3(0, Time.deltaTime * headBobHeight, 0);
                 }
-                if (goingUp == false)
+                if (elapsed > bobSpeed || Mathf.Abs(mycam.transform.localPosition.y - transform.localPosition.y) < .5f)
                 {
-                    mycam.transform.position -= headBob * Time.deltaTime * headBobSpeed;
-                }
-                //when reaching the bottom
-                if (Mathf.Abs(mycam.transform.position.y - originalCameraPos.y) > 0.25f)
-                {
-                    goingUp = true;
-                }
-                //when reaching the top
-                if (Mathf.Abs(mycam.transform.position.y - headBob.y) < 0.25f)
-                {
-                    goingUp = false;
+                    mycam.transform.localPosition -= new Vector3(0, Time.deltaTime * headBobHeight, 0);
+
+                    if (elapsed > bobSpeed * 1.85f)
+                    {
+                        elapsed = 0;
+                    }
                 }
             }
         }
