@@ -50,8 +50,10 @@ public class MyCharacterController : MonoBehaviour
     private float originalSpeed;
     private int jumpsNum = 1;
     private float elapsed = 0;
+
     void Start()
     {
+        Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         mycam = GetComponentInChildren<Camera>();
         myCol = GetComponent<Collider>();
