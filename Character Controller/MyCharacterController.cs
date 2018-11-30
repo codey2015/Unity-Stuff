@@ -31,6 +31,7 @@ public class MyCharacterController : MonoBehaviour
     public bool dashInAir = true;
     public bool breathingEffect = true;
     public int numberOfJumps = 1;
+    public float dashDistanceAllowance = 10f;
     [Header("Look Angles")]
     public float minimumYLook = -60F;
     public float maximumYLook = 60F;
@@ -139,7 +140,7 @@ public class MyCharacterController : MonoBehaviour
             }
 
             //bob head when moving, unless isjumping or is disabled... Need to fix
-            if (isGrounded && allowHeadBob == true && !getInput(dash, false))
+            if (isGrounded && allowHeadBob == true && !getInput(dash, false) && jumpsNum == 1)
             {
                 elapsed += Time.deltaTime;
                 //maybe take away the or part.. not sure
@@ -200,7 +201,7 @@ public class MyCharacterController : MonoBehaviour
                 }
             }
         }
-
+        Debug.DrawRay(mycam.transform.position, mycam.transform.forward * dashDistanceAllowance, Color.red);
     }
 
     bool getInput(string[] usedKeys, bool getKeyDown = true)
@@ -225,8 +226,12 @@ public class MyCharacterController : MonoBehaviour
 
     IEnumerator dashForTime()
     {
+        RaycastHit hit;
+        if (!Physics.Raycast(mycam.transform.position, mycam.transform.forward, out hit, dashDistanceAllowance))
+        {
             moveSpeed *= dashSpeedMultiplier;
             yield return new WaitForSeconds(dashTime);
             moveSpeed = originalSpeed;
+        }
     }
 }
