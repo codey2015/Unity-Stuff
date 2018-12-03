@@ -204,6 +204,7 @@ public class MyCharacterController : MonoBehaviour
             }
         }
         Debug.DrawRay(mycam.transform.position, mycam.transform.forward * dashDistanceAllowance, Color.red);
+        Debug.DrawRay(dasher.transform.position, dasher.transform.forward * dashDistanceAllowance, Color.blue);
     }
 
     bool getInput(string[] usedKeys, bool getKeyDown = true)
@@ -229,7 +230,8 @@ public class MyCharacterController : MonoBehaviour
     IEnumerator dashForTime()
     {
         RaycastHit hit;
-        if (!Physics.Raycast(mycam.transform.position, mycam.transform.forward, out hit, dashDistanceAllowance))
+        //if (!Physics.Raycast(mycam.transform.position, mycam.transform.forward, out hit, dashDistanceAllowance))
+        if (!Physics.Raycast(dasher.transform.position, dasher.transform.forward, out hit, dashDistanceAllowance))
         {
             moveSpeed *= dashSpeedMultiplier;
             yield return new WaitForSeconds(dashTime);
