@@ -4,6 +4,7 @@ using UnityEngine;
 
 [AddComponentMenu("Controllers/First Person Controller")]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(AudioSource))]
 public class FirstPersonShooterController : MonoBehaviour {
     [Header("Speed Adjustment")]
     public float moveSpeed = 5f;
@@ -43,7 +44,9 @@ public class FirstPersonShooterController : MonoBehaviour {
     public GameObject projectile;
     public float projectileSpeed = 25f;
     public float fireRate = .1f;
+    public float bulletContactLimit = 1f;
     public float destroyProjectileTime = 1f;
+    public AudioClip shootSound;
     [Header("Game Object Children (Put children in same order)")]
     public Camera mycam;
     public Transform dasher;
@@ -63,6 +66,7 @@ public class FirstPersonShooterController : MonoBehaviour {
     private bool isRunning = false;
     private int runCount = 0;
     private float newSprintSpeed;
+    private List<GameObject> newProjArr = new List<GameObject>();
     void Start()
     {
         Cursor.visible = false;
@@ -176,13 +180,6 @@ public class FirstPersonShooterController : MonoBehaviour {
                     }
                 }
             }
-            /*
-            if (!getInput(sprint, true))
-            {
-                isRunning = false;
-                moveSpeed = originalSpeed;
-            }
-            */
 
             if (allowFullAuto == false)
             {
@@ -290,6 +287,14 @@ public class FirstPersonShooterController : MonoBehaviour {
         }
         Debug.DrawRay(mycam.transform.position, mycam.transform.forward * dashDistanceAllowance, Color.red);
         Debug.DrawRay(dasher.transform.position, dasher.transform.forward * dashDistanceAllowance, Color.blue);
+        if(newProjArr != null)
+        {
+            for(int i = 0; i < newProjArr.Count; i++)
+            {
+                drawBulletRay(newProjArr[i].transform);
+            }
+            //drawRay(newProj.transform);
+        }
     }
 
     bool getInput(string[] usedKeys, bool getKeyDown = true)
@@ -321,11 +326,25 @@ public class FirstPersonShooterController : MonoBehaviour {
         newProjectile.SetActive(true);
         Rigidbody projectileRB = newProjectile.GetComponent<Rigidbody>();
         projectileRB.velocity += mycam.transform.forward * projectileSpeed * 100 * Time.deltaTime;
+        if (newProjectile != null)
+        {
+            newProjArr.Add(newProjectile);
+        }
+        if(shootSound != null)
+        {
+            AudioSource audio = GetComponent<AudioSource>();
+            audio.clip = shootSound;
+            audio.PlayOneShot(shootSound);
+        }
         projectileRB.constraints = RigidbodyConstraints.FreezeRotationX;
         projectileRB.constraints = RigidbodyConstraints.FreezeRotationY;
+        projectileRB.AddForce(mycam.transform.forward * projectileSpeed * 100);
         StartCoroutine(deleteProjectile(newProjectile));
-        //newProjectile.transform.position += mycam.transform.forward * projectileSpeed * 100 * Time.deltaTime;
-        //projectileRB.AddForce(dasher.transform.forward * projectileSpeed * 100);
+    }
+
+    void drawBulletRay(Transform projectile)
+    {
+        Debug.DrawRay(projectile.transform.position, projectile.transform.forward * bulletContactLimit, Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
     }
 
     IEnumerator fullAutoShoot()
@@ -340,6 +359,10 @@ public class FirstPersonShooterController : MonoBehaviour {
     IEnumerator deleteProjectile(GameObject p)
     {
         yield return new WaitForSeconds(destroyProjectileTime);
+        if (p != null)
+        {
+            newProjArr.Remove(p);
+        }
         Destroy(p);
     }
 
