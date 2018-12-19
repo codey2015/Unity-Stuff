@@ -5,7 +5,8 @@ using UnityEngine;
 [AddComponentMenu("Controllers/First Person Controller")]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
-public class FirstPersonShooterController : MonoBehaviour {
+public class FirstPersonShooterController : MonoBehaviour
+{
     [Header("Speed Adjustment")]
     public float moveSpeed = 5f;
     public float mouseSensitivity = 1f;
@@ -13,8 +14,9 @@ public class FirstPersonShooterController : MonoBehaviour {
     public float jumpAllowance = 1f;
     public float dashSpeedMultiplier = 2.5f;
     public float dashTime = .25f;
-    public float sprintSpeedMultiplier = 1f;
+    public float sprintSpeedMultiplier = 1.5f;
     public float headBobHeight = 1f;
+    public float strafeAirControlDivisor = 1.25f;
     [Tooltip("The lower, the faster the bob")]
     public float bobSpeed = .5f;
 
@@ -87,11 +89,17 @@ public class FirstPersonShooterController : MonoBehaviour {
             {
                 if (dashForwardOnly == true)
                 {
-                    transform.position += Time.deltaTime * moveSpeed * dasher.transform.right;
+                    if(jumpsNum == 1)
+                        transform.position += Time.deltaTime * moveSpeed * dasher.transform.right;
+                    if(jumpsNum != 1)
+                        transform.position += Time.deltaTime * moveSpeed / strafeAirControlDivisor * dasher.transform.right;
                 }
                 if (dashForwardOnly == false)
                 {
-                    transform.position += Time.deltaTime * moveSpeed * mycam.transform.right;
+                    if (jumpsNum == 1)
+                        transform.position += Time.deltaTime * moveSpeed * mycam.transform.right;
+                    if (jumpsNum != 1)
+                        transform.position += Time.deltaTime * moveSpeed / strafeAirControlDivisor * mycam.transform.right;
                 }
             }
 
@@ -100,11 +108,18 @@ public class FirstPersonShooterController : MonoBehaviour {
             {
                 if (dashForwardOnly == true)
                 {
-                    transform.position += Time.deltaTime * moveSpeed * -dasher.transform.right;
+                    if (jumpsNum == 1)
+                        transform.position += Time.deltaTime * moveSpeed * -dasher.transform.right;
+                    if (jumpsNum != 1)
+                        transform.position += Time.deltaTime * moveSpeed / strafeAirControlDivisor * -dasher.transform.right;
+
                 }
                 if (dashForwardOnly == false)
                 {
-                    transform.position += Time.deltaTime * moveSpeed * -mycam.transform.right;
+                    if (jumpsNum == 1)
+                        transform.position += Time.deltaTime * moveSpeed * -mycam.transform.right;
+                    if (jumpsNum != 1)
+                        transform.position += Time.deltaTime * moveSpeed / strafeAirControlDivisor * -mycam.transform.right;
                 }
             }
 
@@ -151,6 +166,7 @@ public class FirstPersonShooterController : MonoBehaviour {
                 if (getInput(sprint, false))
                 {
                     //transform.position += Time.deltaTime * moveSpeed * sprintSpeed * dasher.transform.forward;
+                    print("Running");
                     moveSpeed = newSprintSpeed;
                 }
                 if (!getInput(sprint, false))
@@ -189,12 +205,12 @@ public class FirstPersonShooterController : MonoBehaviour {
                     shootProjectile();
                 }
             }
-            if(allowFullAuto == true)
+            if (allowFullAuto == true)
             {
                 //shoot auto
                 if (getInput(shoot, false))
                 {
-                    if(shotOnce == false)
+                    if (shotOnce == false)
                     {
                         StartCoroutine(fullAutoShoot());
                     }
@@ -238,7 +254,7 @@ public class FirstPersonShooterController : MonoBehaviour {
         rotationY = Mathf.Clamp(rotationY, minimumYLook, maximumYLook);
         mycam.transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
         dasher.transform.localEulerAngles = new Vector3(0, rotationX, 0);
-
+        
         //breathing effect
         if (breathingEffect)
         {
@@ -250,12 +266,12 @@ public class FirstPersonShooterController : MonoBehaviour {
             jumpsNum += 1;
         }
 
-        if(isRunning == true && Input.anyKey )
+        if (isRunning == true && Input.anyKey)
         {
             //transform.position += Time.deltaTime * moveSpeed * sprintSpeed * dasher.transform.forward;
             moveSpeed = newSprintSpeed;
         }
-        if(isRunning == false && !getInput(dash, false) && !getInput(sprint, false))
+        if (isRunning == false && !getInput(dash, false) && !getInput(sprint, false))
         {
             moveSpeed = originalSpeed;
         }
@@ -275,21 +291,35 @@ public class FirstPersonShooterController : MonoBehaviour {
         //jump
         if (getInput(jump, true))
         {
-            if (isGrounded == true)
+            if (numberOfJumps != 1)
             {
-                rb.velocity = Vector3.up * jumpHeight * Time.deltaTime * 10 * -Physics.gravity.y;
-                //if we havent reaches X number of jumps, allow keep jumping
-                if (jumpsNum >= numberOfJumps)
+                if (isGrounded == true)
                 {
-                    isGrounded = false;
+                    rb.velocity = Vector3.up * jumpHeight * Time.deltaTime * 10 * -Physics.gravity.y;
+                    //if we havent reaches X number of jumps, allow keep jumping
+                    if (jumpsNum >= numberOfJumps)
+                    {
+                        isGrounded = false;
+                    }
                 }
+            }
+            else
+            {
+                if (isGrounded == true && jumpsNum == 1)
+                {
+                    rb.velocity = Vector3.up * jumpHeight * Time.deltaTime * 10 * -Physics.gravity.y;
+                    isGrounded = false;
+                    jumpsNum++;
+                }
+                jumpsNum = 1;
             }
         }
         Debug.DrawRay(mycam.transform.position, mycam.transform.forward * dashDistanceAllowance, Color.red);
         Debug.DrawRay(dasher.transform.position, dasher.transform.forward * dashDistanceAllowance, Color.blue);
-        if(newProjArr != null)
+        Debug.DrawRay(transform.position, -Vector3.up * (jumpAllowance + distanceToGround), Color.yellow);
+        if (newProjArr != null)
         {
-            for(int i = 0; i < newProjArr.Count; i++)
+            for (int i = 0; i < newProjArr.Count; i++)
             {
                 drawBulletRay(newProjArr[i].transform);
             }
@@ -330,7 +360,7 @@ public class FirstPersonShooterController : MonoBehaviour {
         {
             newProjArr.Add(newProjectile);
         }
-        if(shootSound != null)
+        if (shootSound != null)
         {
             AudioSource audio = GetComponent<AudioSource>();
             audio.clip = shootSound;
