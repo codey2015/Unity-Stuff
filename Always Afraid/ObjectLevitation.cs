@@ -55,11 +55,14 @@ public class ObjectLevitation : MonoBehaviour {
             if (Input.GetKey(key))
             {
                 //hit.transform.position = new Vector3(hit.point.x, hit.point.y, hit.transform.position.z);
+
+                //from (180 - 270) and (0 - 90)
                 if ((castFrom.localEulerAngles.y > 180 && castFrom.localEulerAngles.y < 270) || castFrom.localEulerAngles.y < 90)
                 {
                     hit.transform.GetComponent<Rigidbody>().MovePosition(new Vector3(hit.transform.position.x, hit.point.y, hit.point.z));
                 }
-                if ((castFrom.localEulerAngles.y > 90 && castFrom.localEulerAngles.y < 180) || castFrom.localEulerAngles.y > 270) //&& castFrom.transform.localEulerAngles.y < 270)
+                //from (90 - 180) and (270 - 360)
+                if ((castFrom.localEulerAngles.y > 90 && castFrom.localEulerAngles.y < 180) || castFrom.localEulerAngles.y > 270) 
                 {
                     hit.transform.GetComponent<Rigidbody>().MovePosition(new Vector3(hit.point.x, hit.point.y, hit.transform.position.z));
                 }
