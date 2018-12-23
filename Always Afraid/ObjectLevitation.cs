@@ -18,11 +18,11 @@ public class ObjectLevitation : MonoBehaviour {
 
     void Start ()
     {
-		if(castFrom == null)
+	if(castFrom == null)
         {
             castFrom = gameObject.transform;
         }
-	}
+    }
 	
 	void FixedUpdate () {
         RaycastHit hit;
