@@ -12,17 +12,19 @@ public class ObjectLevitation : MonoBehaviour {
     [Header("Turn off root motion for animated objects to make them fall with gravity.")]
     public string[] keys = { "e" };
     public string[] forcePushKeys = { "q" };
-    public float xForce = 100f;
-    public float yForce = 100f;
-    public float zForce = 100f;
+    public float xForce = 50f;
+    public float yForce = 50f;
+    public float zForce = 50f;
+    [Header("Use Force instead of velocity to account for mass.")]
+    public bool useForce = true;
 
     void Start ()
     {
-	if(castFrom == null)
+		if(castFrom == null)
         {
             castFrom = gameObject.transform;
         }
-    }
+	}
 	
 	void FixedUpdate () {
         RaycastHit hit;
@@ -67,9 +69,14 @@ public class ObjectLevitation : MonoBehaviour {
                 if (Input.GetKeyUp(fpKey))
                 {
                     Vector3 forwardForce = (new Vector3(xForce * castFrom.forward.x, yForce * castFrom.forward.y, zForce * castFrom.forward.z));
-
-                    hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce);
-                    hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
+                    if (useForce)
+                    {
+                        hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce * 100);
+                    }
+                    else
+                    {
+                        hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
+                    }
                 }
             }
         }
