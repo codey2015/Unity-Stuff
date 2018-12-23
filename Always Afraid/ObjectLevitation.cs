@@ -16,7 +16,8 @@ public class ObjectLevitation : MonoBehaviour {
     public float yForce = 100f;
     public float zForce = 100f;
 
-    void Start () {
+    void Start ()
+    {
 		if(castFrom == null)
         {
             castFrom = gameObject.transform;
