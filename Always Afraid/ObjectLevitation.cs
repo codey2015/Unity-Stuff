@@ -17,6 +17,9 @@ public class ObjectLevitation : MonoBehaviour {
     public float zForce = 50f;
     [Header("Use Force instead of velocity to account for mass.")]
     public bool useForce = true;
+    private float zPoint;
+    private float xPoint;
+    private Rigidbody obj;
 
     void Start ()
     {
@@ -48,38 +51,64 @@ public class ObjectLevitation : MonoBehaviour {
         return 1 << layerMasks[0]; 
     }
 
+    private static float WrapAngle(float angle)
+    {
+        angle %= 360;
+        if (angle > 180)
+            return angle - 360;
+
+        return angle;
+    }
+
+    private static float UnwrapAngle(float angle)
+    {
+        if (angle >= 0)
+            return angle;
+
+        angle = -angle % 360;
+
+        return 360 - angle;
+    }
+
     void lev(RaycastHit hit)
     {
         foreach (string key in keys)
         {
+
+            if (Input.GetKeyDown(key)){
+                //get current x and z pos only once so we can walk with the object
+                zPoint = hit.point.z - castFrom.position.z;
+                xPoint = hit.point.x - castFrom.position.x;
+                obj = hit.transform.GetComponent<Rigidbody>();
+            }
             if (Input.GetKey(key))
             {
-                //hit.transform.position = new Vector3(hit.point.x, hit.point.y, hit.transform.position.z);
 
-                //from (180 - 270) and (0 - 90)
-                if ((castFrom.localEulerAngles.y > 180 && castFrom.localEulerAngles.y < 270) || castFrom.localEulerAngles.y < 90)
-                {
-                    hit.transform.GetComponent<Rigidbody>().MovePosition(new Vector3(hit.transform.position.x, hit.point.y, hit.point.z));
-                }
                 //from (90 - 180) and (270 - 360)
-                if ((castFrom.localEulerAngles.y > 90 && castFrom.localEulerAngles.y < 180) || castFrom.localEulerAngles.y > 270) 
+                if ((castFrom.localEulerAngles.y > 90 && castFrom.localEulerAngles.y < 180) || castFrom.localEulerAngles.y > 270)
                 {
-                    hit.transform.GetComponent<Rigidbody>().MovePosition(new Vector3(hit.point.x, hit.point.y, hit.transform.position.z));
+                    obj.MovePosition(new Vector3(hit.point.x, hit.point.y, castFrom.position.z + zPoint));
                 }
+                //from (180 - 270) and (0 - 90)
+                if ((castFrom.localEulerAngles.y >= 180 && castFrom.localEulerAngles.y <= 270) || castFrom.localEulerAngles.y <= 90)
+                {
+                    obj.MovePosition(new Vector3(castFrom.position.x + xPoint, hit.point.y, hit.point.z));
+                }
+                
             }
             foreach (string fpKey in forcePushKeys)
-            {
-                if (Input.GetKeyUp(fpKey))
                 {
-                    Vector3 forwardForce = (new Vector3(xForce * castFrom.forward.x, yForce * castFrom.forward.y, zForce * castFrom.forward.z));
-                    if (useForce)
+                    if (Input.GetKeyUp(fpKey))
                     {
-                        hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce * 100);
-                    }
-                    else
-                    {
-                        hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
-                    }
+                        Vector3 forwardForce = (new Vector3(xForce * castFrom.forward.x, yForce * castFrom.forward.y, zForce * castFrom.forward.z));
+                        if (useForce)
+                        {
+                            hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce * 100);
+                        }
+                        else
+                        {
+                            hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
+                        }
                 }
             }
         }
