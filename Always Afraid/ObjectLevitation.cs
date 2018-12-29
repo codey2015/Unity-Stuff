@@ -19,6 +19,7 @@ public class ObjectLevitation : MonoBehaviour {
     public bool useForce = true;
     private float zPoint;
     private float xPoint;
+    private float distance;
     private Rigidbody obj;
 
     void Start ()
@@ -39,7 +40,7 @@ public class ObjectLevitation : MonoBehaviour {
                 lev(hit);
             }
         }
-        Debug.DrawRay(castFrom.position, castFrom.forward * maxDistanceToGrab, rayCastColor);       
+        Debug.DrawRay(castFrom.position, castFrom.forward * maxDistanceToGrab, rayCastColor);
     }
 
     int cast()
@@ -74,16 +75,24 @@ public class ObjectLevitation : MonoBehaviour {
     {
         foreach (string key in keys)
         {
-
             if (Input.GetKeyDown(key)){
                 //get current x and z pos only once so we can walk with the object
                 zPoint = hit.point.z - castFrom.position.z;
                 xPoint = hit.point.x - castFrom.position.x;
+                distance = hit.distance;
                 obj = hit.transform.GetComponent<Rigidbody>();
+
             }
             if (Input.GetKey(key))
             {
+                //much simpler and slightly better solution.
+                //one caveat is having the object spawn slightly closer every time
+                obj.MovePosition(castFrom.position + castFrom.forward * distance * 1.25f);
 
+                //hit.transform.position = castFrom.position + castFrom.forward * zPoint;
+
+
+                /*
                 //from (90 - 180) and (270 - 360)
                 if ((castFrom.localEulerAngles.y > 90 && castFrom.localEulerAngles.y < 180) || castFrom.localEulerAngles.y > 270)
                 {
@@ -94,7 +103,7 @@ public class ObjectLevitation : MonoBehaviour {
                 {
                     obj.MovePosition(new Vector3(castFrom.position.x + xPoint, hit.point.y, hit.point.z));
                 }
-                
+                */
             }
             foreach (string fpKey in forcePushKeys)
                 {
