@@ -9,6 +9,7 @@ public class ObjectLevitation : MonoBehaviour {
     public float maxDistanceToGrab = 10f;
     public Transform castFrom;
     public Color rayCastColor = new Color (0, .9f, .3f);
+    public bool requireRigidbody = true;
     [Header("Turn off root motion for animated objects to make them fall with gravity.")]
     public string[] keys = { "e" };
     public string[] forcePushKeys = { "q" };
@@ -21,6 +22,7 @@ public class ObjectLevitation : MonoBehaviour {
     private float xPoint;
     private float distance;
     private Rigidbody obj;
+    private bool pickedUp = false;
 
     void Start ()
     {
@@ -35,10 +37,7 @@ public class ObjectLevitation : MonoBehaviour {
         //use ~ operator to only cast to the specified mask
         if (Physics.Raycast(castFrom.position, castFrom.forward, out hit, maxDistanceToGrab, ~cast()))
         {
-            if (hit.transform.GetComponent<Rigidbody>())
-            {
-                lev(hit);
-            }
+            lev(hit);
         }
         Debug.DrawRay(castFrom.position, castFrom.forward * maxDistanceToGrab, rayCastColor);
     }
@@ -52,71 +51,51 @@ public class ObjectLevitation : MonoBehaviour {
         return 1 << layerMasks[0]; 
     }
 
-    private static float WrapAngle(float angle)
-    {
-        angle %= 360;
-        if (angle > 180)
-            return angle - 360;
-
-        return angle;
-    }
-
-    private static float UnwrapAngle(float angle)
-    {
-        if (angle >= 0)
-            return angle;
-
-        angle = -angle % 360;
-
-        return 360 - angle;
-    }
-
     void lev(RaycastHit hit)
     {
         foreach (string key in keys)
         {
             if (Input.GetKeyDown(key)){
-                //get current x and z pos only once so we can walk with the object
-                zPoint = hit.point.z - castFrom.position.z;
-                xPoint = hit.point.x - castFrom.position.x;
-                distance = hit.distance;
-                obj = hit.transform.GetComponent<Rigidbody>();
-
+                distance = hit.distance + 1.44f;
+                pickedUp = true;
+                try
+                {
+                    obj = hit.transform.GetComponent<Rigidbody>();
+                }
+                catch
+                {
+                    obj = null;
+                }
+                
             }
-            if (Input.GetKey(key))
+            if (Input.GetKey(key) && pickedUp == true)
             {
-                //much simpler and slightly better solution.
-                //one caveat is having the object spawn slightly closer every time
-                obj.MovePosition(castFrom.position + castFrom.forward * distance * 1.25f);
-
-                //hit.transform.position = castFrom.position + castFrom.forward * zPoint;
-
-
-                /*
-                //from (90 - 180) and (270 - 360)
-                if ((castFrom.localEulerAngles.y > 90 && castFrom.localEulerAngles.y < 180) || castFrom.localEulerAngles.y > 270)
+                if(obj != null && requireRigidbody == true)
                 {
-                    obj.MovePosition(new Vector3(hit.point.x, hit.point.y, castFrom.position.z + zPoint));
+                    obj.MovePosition(castFrom.position + castFrom.forward * distance);
                 }
-                //from (180 - 270) and (0 - 90)
-                if ((castFrom.localEulerAngles.y >= 180 && castFrom.localEulerAngles.y <= 270) || castFrom.localEulerAngles.y <= 90)
+                if(requireRigidbody == false)
                 {
-                    obj.MovePosition(new Vector3(castFrom.position.x + xPoint, hit.point.y, hit.point.z));
+                    hit.transform.position = castFrom.position + castFrom.forward * distance;
                 }
-                */
+                
             }
             foreach (string fpKey in forcePushKeys)
                 {
                     if (Input.GetKeyUp(fpKey))
-                    {
-                        Vector3 forwardForce = (new Vector3(xForce * castFrom.forward.x, yForce * castFrom.forward.y, zForce * castFrom.forward.z));
-                        if (useForce)
+                    {                        
+                        if (requireRigidbody == true)
                         {
-                            hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce * 100);
-                        }
-                        else
-                        {
-                            hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
+                            pickedUp = false;
+                            Vector3 forwardForce = (new Vector3(xForce * castFrom.forward.x, yForce * castFrom.forward.y, zForce * castFrom.forward.z));
+                            if (useForce)
+                            {
+                                hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce * 100);
+                            }
+                            else
+                            {
+                                hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
+                            }
                         }
                 }
             }

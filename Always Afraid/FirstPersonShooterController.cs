@@ -5,6 +5,7 @@ using UnityEngine;
 [AddComponentMenu("Controllers/First Person Controller")]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(Collider))]
 public class FirstPersonShooterController : MonoBehaviour
 {
     [Header("Speed Adjustment")]
@@ -85,10 +86,16 @@ public class FirstPersonShooterController : MonoBehaviour
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
-        mycam = GetComponentInChildren<Camera>();
         myCol = GetComponent<Collider>();
-        dasher = transform.GetChild(1).GetComponent<Transform>();
-        playerAnimations = GetComponent<Animator>();
+        if (mycam == null)
+        {
+            mycam = GetComponentInChildren<Camera>();
+        }
+        if(dasher == null)
+        {
+            dasher = transform.GetChild(1).GetComponent<Transform>();
+        }
+        try{playerAnimations = GetComponent<Animator>();}catch{}
         originalSpeed = moveSpeed;
         newSprintSpeed = moveSpeed * sprintSpeedMultiplier;
     }
@@ -100,7 +107,8 @@ public class FirstPersonShooterController : MonoBehaviour
             //right
             if (getInput(moveRight, false))
             {
-                playerAnimations.SetBool(walkRight, true);
+                if(playerAnimations!=null)
+                    playerAnimations.SetBool(walkRight, true);
 
                 if (dashForwardOnly == true)
                 {
@@ -121,7 +129,8 @@ public class FirstPersonShooterController : MonoBehaviour
             //left
             if (getInput(moveLeft, false))
             {
-                playerAnimations.SetBool(walkLeft, true);
+                if (playerAnimations != null)
+                    playerAnimations.SetBool(walkLeft, true);
                 if (dashForwardOnly == true)
                 {
                     if (jumpsNum == 1)
@@ -142,7 +151,8 @@ public class FirstPersonShooterController : MonoBehaviour
             //forward
             if (getInput(moveUp, false))
             {
-                playerAnimations.SetBool(walkForward, true);               
+                if (playerAnimations != null)
+                    playerAnimations.SetBool(walkForward, true);               
 
                 if (dashForwardOnly == true)
                 {
@@ -169,7 +179,8 @@ public class FirstPersonShooterController : MonoBehaviour
             //back
             if (getInput(moveDown, false))
             {
-                playerAnimations.SetBool(walkBackward, true);
+                if (playerAnimations != null)
+                    playerAnimations.SetBool(walkBackward, true);
 
                 if (dashForwardOnly == true)
                 {
@@ -316,11 +327,14 @@ public class FirstPersonShooterController : MonoBehaviour
         }
         if (!Input.anyKey)
         {
-            playerAnimations.SetBool(walkForward, false);
-            playerAnimations.SetBool(walkLeft, false);
-            playerAnimations.SetBool(walkRight, false);
-            playerAnimations.SetBool(walkBackward, false);
-            playerAnimations.SetBool(jumping, false);
+            if (playerAnimations != null)
+            {
+                playerAnimations.SetBool(walkForward, false);
+                playerAnimations.SetBool(walkLeft, false);
+                playerAnimations.SetBool(walkRight, false);
+                playerAnimations.SetBool(walkBackward, false);
+                playerAnimations.SetBool(jumping, false);
+            }
 
         }
     }
@@ -343,7 +357,8 @@ public class FirstPersonShooterController : MonoBehaviour
             {
                 if (isGrounded == true)
                 {
-                    playerAnimations.SetBool(jumping, true);
+                    if (playerAnimations != null)
+                        playerAnimations.SetBool(jumping, true);
                     rb.velocity = Vector3.up * jumpHeight * Time.deltaTime * 10 * -Physics.gravity.y;
                     //if we havent reaches X number of jumps, allow keep jumping
                     if (jumpsNum >= numberOfJumps)
