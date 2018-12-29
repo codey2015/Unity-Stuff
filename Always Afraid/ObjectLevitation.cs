@@ -90,12 +90,13 @@ public class ObjectLevitation : MonoBehaviour {
                             Vector3 forwardForce = (new Vector3(xForce * castFrom.forward.x, yForce * castFrom.forward.y, zForce * castFrom.forward.z));
                             if (useForce)
                             {
-                                hit.transform.GetComponent<Rigidbody>().AddForce(forwardForce * 100);
+                                obj.AddForce(forwardForce * 100);
                             }
                             else
                             {
-                                hit.transform.GetComponent<Rigidbody>().velocity += forwardForce;
+                                obj.velocity += forwardForce;
                             }
+                        obj = null;
                         }
                 }
             }
