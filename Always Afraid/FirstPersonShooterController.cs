@@ -191,7 +191,7 @@ public class FirstPersonShooterController : MonoBehaviour
                     transform.position += Time.deltaTime * moveSpeed * -mycam.transform.forward;
                 }
             }
-            
+            //right and forward
             if (getInput(moveRight, false) && getInput(moveUp, false))
             {
                 if (jumpsNum == 1)
@@ -199,6 +199,7 @@ public class FirstPersonShooterController : MonoBehaviour
                 if (jumpsNum != 1)
                     transform.position -= Time.deltaTime * moveSpeed/2 / strafeAirControlDivisor * dasher.transform.right;
             }
+            //left and forward
             if (getInput(moveLeft, false) && getInput(moveUp, false))
             {
                 if (jumpsNum == 1)
@@ -206,8 +207,22 @@ public class FirstPersonShooterController : MonoBehaviour
                 if (jumpsNum != 1)
                     transform.position -= Time.deltaTime * moveSpeed / 2 / strafeAirControlDivisor * -dasher.transform.right;
             }
-
-
+            //back and right
+            if (getInput(moveRight, false) && getInput(moveDown, false))
+            {
+                if (jumpsNum == 1)
+                    transform.position -= Time.deltaTime * moveSpeed / 2 * dasher.transform.right;
+                if (jumpsNum != 1)
+                    transform.position -= Time.deltaTime * moveSpeed / 2 / strafeAirControlDivisor * dasher.transform.right;
+            }
+            //back and left
+            if (getInput(moveLeft, false) && getInput(moveDown, false))
+            {
+                if (jumpsNum == 1)
+                    transform.position -= Time.deltaTime * moveSpeed / 2 * -dasher.transform.right;
+                if (jumpsNum != 1)
+                    transform.position -= Time.deltaTime * moveSpeed / 2 / strafeAirControlDivisor * -dasher.transform.right;
+            }
 
 
             if (holdToRun == true)
@@ -218,10 +233,6 @@ public class FirstPersonShooterController : MonoBehaviour
                     //transform.position += Time.deltaTime * moveSpeed * sprintSpeed * dasher.transform.forward;
                     print("Running");
                     moveSpeed = newSprintSpeed;
-                }
-                if (!getInput(sprint, false))
-                {
-                    //moveSpeed = originalSpeed;
                 }
             }
             if (holdToRun == false)
@@ -387,7 +398,6 @@ public class FirstPersonShooterController : MonoBehaviour
             {
                 drawBulletRay(newProjArr[i].transform);
             }
-            //drawRay(newProj.transform);
         }
     }
 
