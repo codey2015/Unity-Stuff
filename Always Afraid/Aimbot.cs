@@ -13,6 +13,8 @@ public class Aimbot : MonoBehaviour {
     public float projectileSpeed = 500f;
     public float fireRate = .5f;
     public float destroyAfter = 3f;
+    public bool useRaycastDetection = true;
+    public float castDistanceOffset = 1f;
 
     private bool shot = false;
     private bool lockedOn = false;
@@ -49,14 +51,28 @@ public class Aimbot : MonoBehaviour {
 
         if(lockedOn == true)
         {
-            List<Collider> arr = new List<Collider>();
-            foreach (Collider Collider in Physics.OverlapSphere(transform.position, attackRadius))
+            if (useRaycastDetection == false)
             {
-                arr.Add(Collider);
+                List<Collider> arr = new List<Collider>();
+                foreach (Collider Collider in Physics.OverlapSphere(transform.position, attackRadius))
+                {
+                    arr.Add(Collider);
+                }
+                if (!arr.Contains(lockOn.GetComponent<Collider>()))
+                {
+                    lockedOn = false;
+                }
             }
-            if (!arr.Contains(lockOn.GetComponent<Collider>()))
+            if(useRaycastDetection == true)
             {
-                lockedOn = false;
+                RaycastHit hit;
+                if(Physics.Raycast(projectile.transform.position, projectile.transform.forward * (attackRadius - castDistanceOffset), out hit))
+                {
+                    if(hit.collider.gameObject.tag != autoAimTag)
+                    {
+                        lockedOn = false;
+                    }
+                }
             }
         }
 
@@ -67,8 +83,7 @@ public class Aimbot : MonoBehaviour {
                 StartCoroutine(TurretMode());
             }
         }
-
-        Debug.DrawRay(projectile.transform.position, projectile.transform.forward, boundsColor);
+        Debug.DrawRay(projectile.transform.position, projectile.transform.forward * (attackRadius - castDistanceOffset), boundsColor);
     }
 
     IEnumerator TurretMode()
