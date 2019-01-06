@@ -90,6 +90,7 @@ public class ObjectPlacer : MonoBehaviour {
                 }
                 GO.transform.localScale = OffsetVectorScale(GO.transform.localScale);
                 GO.transform.localRotation = OffsetVectorRotation(GO.transform.localRotation);
+                GO.name = gameObject.transform.GetChild(i).gameObject.name;
             }
         }
     }
