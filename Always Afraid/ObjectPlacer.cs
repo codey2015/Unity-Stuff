@@ -50,7 +50,7 @@ public class ObjectPlacer : MonoBehaviour {
         {
             if (Physics.Raycast(transform.position, transform.up, out hit, Mathf.Infinity))
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + hit.distance + 10f, transform.position.z);
+                //transform.position = new Vector3(transform.position.x, transform.position.y + hit.distance + 10f, transform.position.z);
             }
             if (Physics.Raycast(transform.position, -transform.up, out hit, Mathf.Infinity))
             {
@@ -83,7 +83,13 @@ public class ObjectPlacer : MonoBehaviour {
                 //GO.transform.parent = placedObjectsHolder;
                 GO.SetActive(true);
                 GO.transform.position = OffsetVectorPosition(GO.transform.position);
+                RaycastHit hitGround;
+                if (Physics.Raycast(GO.transform.position, -transform.up, out hitGround, Mathf.Infinity))
+                {
+                    GO.transform.position = new Vector3(GO.transform.position.x, hitGround.point.y, GO.transform.position.z);
+                }
                 GO.transform.localScale = OffsetVectorScale(GO.transform.localScale);
+                GO.transform.localRotation = OffsetVectorRotation(GO.transform.localRotation);
             }
         }
     }
@@ -91,7 +97,6 @@ public class ObjectPlacer : MonoBehaviour {
     Vector3 OffsetVectorPosition(Vector3 vec)
     {
         float x = Random.Range(-transform.lossyScale.y, transform.lossyScale.y);
-        float y = Random.Range(0, transform.lossyScale.y);
         float z = Random.Range(-transform.lossyScale.y, transform.lossyScale.y);
         Vector3 returnVec = new Vector3(x, vec.y, z);
         returnVec += vec;
@@ -101,7 +106,13 @@ public class ObjectPlacer : MonoBehaviour {
     Vector3 OffsetVectorScale(Vector3 vec)
     {
         float xyz = Random.Range(scaleOffsetMin, scaleOffsetMax);
-        Vector3 returnVec = new Vector3(xyz * vec.x, xyz * vec.x, xyz * vec.x);
+        Vector3 returnVec = new Vector3(xyz * vec.x, xyz * vec.y, xyz * vec.z);
+        return returnVec;
+    }
+
+    Quaternion OffsetVectorRotation(Quaternion vec)
+    {
+        Quaternion returnVec = new Quaternion(vec.x, Random.rotation.y, vec.z, 1);
         return returnVec;
     }
 
