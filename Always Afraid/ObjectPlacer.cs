@@ -10,7 +10,11 @@ public class ObjectPlacer : MonoBehaviour {
     public bool hideWhenNotSelected = true;
     [Header("Pick an empty gameObject to place everything in.")]
     public Transform placedObjectsHolder;
+    [Header("Press shift + the key below to delete objects in the specified layer.")]
     public KeyCode placingKey = KeyCode.M;
+    [Header("Puts objects into this layer automatically. Also allows deletion of objects from this layer.")]
+    public LayerMask layerUsed;
+    public bool useLayerToDelete = true;
 
     [Range(1, 50)]
     public int objectDensity = 1;
@@ -48,10 +52,6 @@ public class ObjectPlacer : MonoBehaviour {
 
         if (hidden == false)
         {
-            if (Physics.Raycast(transform.position, transform.up, out hit, Mathf.Infinity))
-            {
-                //transform.position = new Vector3(transform.position.x, transform.position.y + hit.distance + 10f, transform.position.z);
-            }
             if (Physics.Raycast(transform.position, -transform.up, out hit, Mathf.Infinity))
             {
                 Gizmos.DrawSphere(new Vector3(transform.position.x, hit.point.y, transform.position.z), transform.lossyScale.y);
@@ -91,6 +91,39 @@ public class ObjectPlacer : MonoBehaviour {
                 GO.transform.localScale = OffsetVectorScale(GO.transform.localScale);
                 GO.transform.localRotation = OffsetVectorRotation(GO.transform.localRotation);
                 GO.name = gameObject.transform.GetChild(i).gameObject.name;
+
+                GO.layer = (int)Mathf.Log(layerUsed.value, 2);
+
+            }
+        }
+    }
+
+    public void DeleteObjects(Vector3 pos)
+    {
+        Bounds b = new Bounds
+        {
+            center = pos,
+            extents = new Vector3(transform.lossyScale.y, transform.lossyScale.y, transform.lossyScale.y)
+        };
+
+        if (useLayerToDelete)
+        {
+            foreach (Transform g in placedObjectsHolder)
+            {
+                if (b.Contains(g.transform.position) && g.gameObject.layer == (int)Mathf.Log(layerUsed.value, 2))
+                {
+                    DestroyImmediate(g.gameObject);
+                }
+            }
+        }
+        if (!useLayerToDelete)
+        {
+            foreach (Transform g in placedObjectsHolder)
+            {
+                if (b.Contains(g.transform.position))
+                {
+                    DestroyImmediate(g.gameObject);
+                }
             }
         }
     }

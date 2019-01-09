@@ -33,12 +33,19 @@ public class ObjectPlacerHelper : Editor
                         }
                 }
             }
+        if (e.shift)
+        {
+            if (Event.current.keyCode == (OP.PlacingKey()))
+            {
+                OP.DeleteObjects(hit.point);
+            }
+        }
        
         switch (e.type)
         {
             case EventType.KeyDown:
                 {
-                    if (Event.current.keyCode == (OP.PlacingKey()))
+                    if (Event.current.keyCode == (OP.PlacingKey()) && !e.shift)
                     {
                         OP.PlaceObject();                       
                     }
@@ -49,7 +56,7 @@ public class ObjectPlacerHelper : Editor
         
 
     }
-
+    /*
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -58,7 +65,7 @@ public class ObjectPlacerHelper : Editor
         ObjectPlacer OP = (ObjectPlacer)target;
         
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("exampleClassList"), new GUIContent("Examples Lists", "List of clasess."), true);
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("exampleClassList"), new GUIContent("Examples Lists", "List of clasess."), true);
         ObjectShowerHelper.ShowWindow();
         serializedObject.ApplyModifiedProperties();
     }
@@ -73,5 +80,5 @@ public class ObjectPlacerHelper : Editor
         GUI.Label(r, target.name + " is being previewed");
         //GUI.
     }
-
+    */
 }
